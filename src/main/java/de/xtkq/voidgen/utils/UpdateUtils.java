@@ -1,7 +1,7 @@
 package de.xtkq.voidgen.utils;
 
 import com.google.gson.Gson;
-import org.bukkit.plugin.java.JavaPlugin;
+import de.xtkq.voidgen.VoidGen;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -14,9 +14,9 @@ public class UpdateUtils {
     private static boolean updateAvailable = false;
     private static String latestRelease;
     private static String latestReleaseURL;
-    private final JavaPlugin plugin;
+    private final VoidGen plugin;
 
-    public UpdateUtils(JavaPlugin paramPlugin) {
+    public UpdateUtils(VoidGen paramPlugin) {
         this.plugin = paramPlugin;
         latestRelease = paramPlugin.getDescription().getVersion();
     }
@@ -34,7 +34,7 @@ public class UpdateUtils {
     }
 
     public void checkForUpdates() {
-        this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(this.plugin, () -> {
+        this.plugin.getScheduler().runTimerAsync(() -> {
             Gson gson = new Gson();
             try {
                 URL url = new URL(String.format(GITHUB_API, this.plugin.getName()));

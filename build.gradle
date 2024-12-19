@@ -11,6 +11,7 @@ buildscript {
 
 plugins {
     id 'java'
+    id 'com.gradleup.shadow' version '8.3.5'
 }
 
 group = project.plugin_group as Object
@@ -42,11 +43,16 @@ repositories {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
+    maven {
+        name = 'jitpack'
+        url = 'https://jitpack.io/'
+    }
 }
 
 dependencies {
-//    implementation 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
-    implementation group: 'org.spigotmc', name: 'spigot-api', version: '1.18.1-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT'
+    implementation 'com.github.technicallycoded:FoliaLib:v0.4.3'
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
 }
 
 processResources {
@@ -60,15 +66,32 @@ processResources {
     }
 }
 
+shadowJar {
+    archiveClassifier = ''
+
+    exclude 'org/intellij/**'
+    exclude 'org/jetbrains/**'
+
+    minimize {
+        exclude dependency("com.github.technicallycoded:FoliaLib:.*")
+        exclude dependency("org.apache.commons:commons-lang3:.*")
+    }
+
+    relocate 'com.tcoded.folialib', 'de.xtkq.voidgen.lib.folialib'
+
+}
+
 def proguardOutFile = rootProject.file("$buildDir/libs/release.jar")
-def jarFile = jar.outputs.files.singleFile
+def jarFile = shadowJar.outputs.files.singleFile
 task proguard(type: ProGuardTask) {
+    dependsOn shadowJar
+
     outputs.upToDateWhen { false }
     configuration 'configuration.pro'
 
     injars jarFile
     outjars proguardOutFile
-    libraryjars configurations.findByName('runtimeClasspath').getFiles()
+    libraryjars files(configurations.compileClasspath.collect())
     // Java 8
     libraryjars "${System.getProperty("java.home")}/lib/rt.jar"
     // Java 9+ compatibility

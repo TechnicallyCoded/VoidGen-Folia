@@ -1,13 +1,13 @@
 package de.xtkq.voidgen.events;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import de.xtkq.voidgen.VoidGen;
 
 public class EventManager {
 
-    private final JavaPlugin javaPlugin;
+    private final VoidGen javaPlugin;
     private PlayerLoginListener playerLogin;
 
-    public EventManager(JavaPlugin paramPlugin) {
+    public EventManager(VoidGen paramPlugin) {
         this.javaPlugin = paramPlugin;
     }
 

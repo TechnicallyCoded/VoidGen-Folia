@@ -5,7 +5,7 @@ import com.google.gson.JsonSyntaxException;
 import de.xtkq.voidgen.generator.annotations.VoidChunkGenInfo;
 import de.xtkq.voidgen.generator.interfaces.ChunkGen2D;
 import de.xtkq.voidgen.generator.settings.ChunkGenSettings;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
